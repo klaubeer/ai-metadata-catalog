@@ -1,3 +1,5 @@
+Demo online: https://predict-fill-link-continuity.trycloudflare.com/
+
 # AI Metadata Catalog
 
 Plataforma de **catálogo de metadados com suporte de IA** que permite que analistas descubram datasets, entendam seus schemas e consultem metadados usando linguagem natural.
