@@ -1,6 +1,6 @@
 Demo online: https://predict-fill-link-continuity.trycloudflare.com/
 
-# AI Metadata Catalog
+# Data Navigator
 
 Plataforma de **catálogo de metadados com suporte de IA** que permite que analistas descubram datasets, entendam seus schemas e consultem metadados usando linguagem natural.
 
@@ -100,14 +100,6 @@ Mostra:
 
 O sistema permite pesquisar datasets usando linguagem natural.
 
-Exemplo:
-
-```
-
-vendas por região
-
-```
-
 A busca utiliza **embeddings vetoriais** armazenados no banco.
 
 ---
@@ -184,41 +176,7 @@ Essas métricas ajudam a entender a confiabilidade do dataset.
 
 ---
 
-# Estrutura do Projeto
 
-```
-
-ai-metadata-catalog/
-
-agente/
-agente.py
-ferramentas.py
-prompt.py
-teste_agente.py
-
-backend/
-api/
-catalog/
-config/
-
-templates/
-catalogo/
-chat/
-
-static/
-
-ingestao/
-gerar_metadados.py
-gerar_embeddings.py
-testar_busca.py
-
-qualidade/
-
-docker-compose.yml
-Dockerfile
-requirements.txt
-
-```
 
 ---
 
@@ -290,31 +248,9 @@ docker exec -it catalog_backend python ingestao/gerar_embeddings.py
 
 ```
 
-## 5. Acessar aplicação
 
 ```
 
-
-
-```
-
----
-
-# Demonstração do sistema
-
-Fluxo de uso:
-
-```
-
-Home
-↓
-Chat com agente
-↓
-Descobrir tabelas
-↓
-Ir para catálogo
-↓
-Explorar schema
 
 ```
 
