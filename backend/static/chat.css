@@ -1,0 +1,162 @@
+/* layout geral */
+
+#layout{
+display:flex;
+gap:24px;
+max-width:1200px;
+margin:auto;
+align-items:stretch;
+}
+
+
+/* sugestões */
+
+#suggestions{
+width:260px;
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+.card-title{
+font-weight:bold;
+margin-bottom:6px;
+}
+
+.card{
+background:white;
+border-radius:10px;
+padding:14px;
+cursor:pointer;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+transition:0.2s;
+font-size:14px;
+}
+
+.card:hover{
+transform:translateY(-2px);
+background:#f1f5ff;
+}
+
+
+/* chat */
+
+#chat-container{
+flex:1;
+height:80vh;
+display:flex;
+flex-direction:column;
+background:white;
+border-radius:10px;
+box-shadow:0 4px 20px rgba(0,0,0,0.1);
+overflow:hidden;
+}
+
+#chat-header{
+padding:14px 16px;
+font-weight:bold;
+background:#2563eb;
+color:white;
+}
+
+#chat-box{
+flex:1;
+padding:20px;
+overflow-y:auto;
+background:#f5f7fb;
+}
+
+
+/* mensagens */
+
+.msg{
+margin-bottom:16px;
+display:flex;
+}
+
+.user{
+justify-content:flex-end;
+}
+
+.bot{
+justify-content:flex-start;
+}
+
+.bubble{
+max-width:65%;
+padding:10px 14px;
+border-radius:10px;
+font-size:14px;
+line-height:1.4;
+}
+
+.user .bubble{
+background:#2563eb;
+color:white;
+}
+
+.bot .bubble{
+background:#e5e7eb;
+}
+
+
+/* input */
+
+#input-area{
+display:flex;
+padding:12px;
+border-top:1px solid #eee;
+background:white;
+}
+
+#pergunta{
+flex:1;
+padding:10px;
+border:1px solid #ddd;
+border-radius:6px;
+font-size:14px;
+}
+
+#input-area button{
+margin-left:10px;
+background:#2563eb;
+color:white;
+border:none;
+padding:10px 16px;
+border-radius:6px;
+cursor:pointer;
+}
+
+
+/* responsivo */
+
+@media (max-width:900px){
+
+#layout{
+flex-direction:column;
+}
+
+#suggestions{
+width:100%;
+flex-direction:row;
+flex-wrap:wrap;
+}
+
+.card{
+flex:1 1 45%;
+}
+
+}
+
+.bubble p{
+margin-bottom:8px;
+}
+
+.bubble ul{
+padding-left:18px;
+margin-bottom:8px;
+}
+
+.bubble li{
+margin-bottom:4px;
+}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="bg-white shadow rounded-lg p-6">
+
+<div class="mb-4 flex justify-between items-center">
+    <h2 class="text-xl font-semibold">Datasets</h2>
+
+    <div class="space-x-2">
+        <a href="/" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            ← Home
+        </a>
+
+        <a href="/chat/" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            → Chat
+        </a>
+    </div>
+</div>
+
+<table class="w-full">
+
+<thead>
+<tr class="border-b">
+<th class="text-left p-2">Schema</th>
+<th class="text-left p-2">Tabela</th>
+<th class="text-left p-2">Responsável</th>
+<th class="text-left p-2">Última atualização</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for t in tabelas %}
+
+<tr class="border-b hover:bg-gray-50">
+
+<td class="p-2">{{ t.schema }}</td>
+
+<td class="p-2 font-medium">
+<a href="/catalogo/{{ t.id }}/" class="text-blue-600 hover:underline">
+{{ t.nome }}
+</a>
+</td>
+
+<td class="p-2">{{ t.responsavel }}</td>
+
+<td class="p-2">{{ t.ultima_atualizacao }}</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+{% endblock %}

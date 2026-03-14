@@ -1,0 +1,10 @@
+Django
+djangorestframework
+psycopg2-binary
+pgvector
+langchain==0.1.20
+openai
+celery
+redis
+python-dotenv
+langchain-openai

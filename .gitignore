@@ -1,0 +1,154 @@
+# .gitignore
+
+# ------------------------------
+
+# Python
+
+# ------------------------------
+
+**pycache**/
+*.py[cod]
+*$py.class
+
+# Distribuição / build
+
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Ambiente virtual
+
+venv/
+.env/
+.env.*
+
+# ------------------------------
+
+# Django
+
+# ------------------------------
+
+*.log
+db.sqlite3
+media/
+staticfiles/
+
+# Migrações (opcional ignorar em POC)
+
+# */migrations/*
+
+# !*/migrations/**init**.py
+
+# ------------------------------
+
+# Variáveis de ambiente
+
+# ------------------------------
+
+.env
+.env.local
+.env.dev
+.env.prod
+
+# ------------------------------
+
+# Banco de dados
+
+# ------------------------------
+
+*.db
+*.sqlite3
+postgres_data/
+
+# ------------------------------
+
+# Redis / Celery
+
+# ------------------------------
+
+celerybeat-schedule
+celerybeat.pid
+
+# ------------------------------
+
+# Docker
+
+# ------------------------------
+
+docker_data/
+*.pid
+
+# ------------------------------
+
+# Logs
+
+# ------------------------------
+
+logs/
+*.log
+
+# ------------------------------
+
+# IDE / Editor
+
+# ------------------------------
+
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# ------------------------------
+
+# Sistema operacional
+
+# ------------------------------
+
+.DS_Store
+Thumbs.db
+
+# ------------------------------
+
+# Node (caso frontend evolua)
+
+# ------------------------------
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ------------------------------
+
+# Test / Coverage
+
+# ------------------------------
+
+htmlcov/
+.coverage
+.coverage.*
+.pytest_cache/
+.tox/
+
+# ------------------------------
+
+# LLM / AI artifacts
+
+# ------------------------------
+
+embeddings/
+vector_cache/
+llm_cache/
+
+# ------------------------------
+
+# Arquivos temporários
+
+# ------------------------------
+
+*.tmp
+*.temp
+*.bak

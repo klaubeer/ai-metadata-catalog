@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="bg-white shadow rounded-lg p-6">
+
+    <!-- Header da Tabela -->
+    <div class="flex items-center justify-between mb-4">
+
+        <div>
+            <h1 class="text-2xl font-bold">
+                {{ tabela.schema }}.{{ tabela.nome }}
+            </h1>
+
+            {% if tabela.responsavel %}
+            <span class="text-gray-500 text-sm">
+                Responsável: {{ tabela.responsavel }}
+            </span>
+            {% endif %}
+        </div>
+
+        <!-- Botões de navegação -->
+        <div class="space-x-2">
+            <a href="/" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
+                Home
+            </a>
+
+            <a href="/chat/" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
+                Chat
+            </a>
+
+            <a href="/catalogo/" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
+                Catálogo
+            </a>
+        </div>
+
+    </div>
+
+    {% if tabela.descricao %}
+    <p class="mb-6 text-gray-700">
+        {{ tabela.descricao }}
+    </p>
+    {% endif %}
+
+    <!-- Colunas da Tabela -->
+    <h2 class="text-xl font-semibold mt-6 mb-2">Colunas</h2>
+
+    <div class="overflow-x-auto">
+        <table class="table-auto w-full border border-gray-200">
+
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="border px-3 py-2 text-left">Coluna</th>
+                    <th class="border px-3 py-2 text-left">Tipo</th>
+                    <th class="border px-3 py-2 text-left">Descrição</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for coluna in colunas %}
+                <tr class="hover:bg-gray-50">
+                    <td class="border px-3 py-2">{{ coluna.nome }}</td>
+                    <td class="border px-3 py-2">{{ coluna.tipo_dado|default:"-" }}</td>
+                    <td class="border px-3 py-2">{{ coluna.descricao|default:"-" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td class="border px-3 py-2" colspan="3">
+                        Sem colunas cadastradas
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+    </div>
+
+    <!-- Informações Extras -->
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-gray-700">
+
+        {% if tabela.ultima_atualizacao %}
+        <div>
+            <span class="font-semibold">Última atualização:</span>
+            {{ tabela.ultima_atualizacao }}
+        </div>
+        {% endif %}
+
+        {% if tabela.metrica_qualidade %}
+        <div>
+            <span class="font-semibold">Null rate:</span>
+            {{ tabela.metrica_qualidade.taxa_nulos|default:"-" }}
+        </div>
+
+        <div>
+            <span class="font-semibold">Duplicados:</span>
+            {{ tabela.metrica_qualidade.taxa_duplicados|default:"-" }}
+        </div>
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

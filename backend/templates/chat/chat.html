@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'chat.css' %}">
+<script src="{% static 'chat.js' %}"></script>
+
+
+<div id="layout">
+
+<!-- sugestões -->
+
+<div id="suggestions">
+
+<div class="card-title">
+Sugestões de pesquisa
+</div>
+
+<div class="card" onclick="sugerir('Quais tabelas de inventário existem?')">
+📊 Tabelas de inventário
+</div>
+
+<div class="card" onclick="sugerir('Quais tabelas de marketing existem?')">
+📢 Dados de marketing
+</div>
+
+<div class="card" onclick="sugerir('Explique o schema da tabela sales_table_9')">
+🧩 Ver schema dados tabela Y
+</div>
+
+<div class="card" onclick="sugerir('Qual a qualidade da tabela sales_table_9?')">
+🧪 Qualidade de dados tabela X
+</div>
+
+<div class="card" onclick="sugerir('Quais tabelas contêm dados de vendas nos últimos 30 dias?')">
+📊 Vendas recentes
+</div>
+
+
+</div>
+
+
+<!-- chat -->
+
+<div id="chat-container">
+
+
+<div id="chat-header" class="flex items-center justify-between px-4 py-2 bg-blue-600 text-white rounded-t">
+    🤖
+    <div class="space-x-2">
+        <a href="/" class="bg-white text-blue-600 px-3 py-1 rounded hover:bg-gray-100">
+            ← Voltar para a Home
+        </a>
+        <a href="/catalogo/" class="bg-white text-blue-600 px-3 py-1 rounded hover:bg-gray-100">
+            → Ir para o Catálogo
+        </a>
+    </div>
+</div>
+
+
+
+<div id="chat-box"></div>
+
+<div id="input-area">
+
+<input
+id="pergunta"
+placeholder="Pergunte algo sobre os datasets..."
+onkeydown="if(event.key==='Enter') enviarPergunta()"
+/>
+
+<button onclick="enviarPergunta()">Enviar</button>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}
