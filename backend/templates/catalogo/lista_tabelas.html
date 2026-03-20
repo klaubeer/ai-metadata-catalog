@@ -4,56 +4,117 @@
 
 <div class="bg-white shadow rounded-lg p-6">
 
-<div class="mb-4 flex justify-between items-center">
-    <h2 class="text-xl font-semibold">Datasets</h2>
-
-    <div class="space-x-2">
-        <a href="/" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-            ← Home
-        </a>
-
-        <a href="/chat/" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-            → Chat
-        </a>
+    <!-- Cabeçalho -->
+    <div class="mb-5 flex flex-wrap justify-between items-center gap-3">
+        <div>
+            <h2 class="text-xl font-semibold">Datasets</h2>
+            <p class="text-gray-400 text-sm">{{ tabelas|length }} tabela(s) encontrada(s)</p>
+        </div>
+        <div class="space-x-2">
+            <a href="/" class="bg-gray-100 text-gray-700 px-4 py-2 rounded hover:bg-gray-200 text-sm">
+                ← Home
+            </a>
+            <a href="/catalogo/qualidade/" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 text-sm">
+                Dashboard Qualidade
+            </a>
+            <a href="/chat/" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
+                Chat IA
+            </a>
+        </div>
     </div>
-</div>
 
-<table class="w-full">
+    <!-- Filtros -->
+    <form method="get" class="flex flex-wrap gap-3 mb-5 items-end">
 
-<thead>
-<tr class="border-b">
-<th class="text-left p-2">Schema</th>
-<th class="text-left p-2">Tabela</th>
-<th class="text-left p-2">Responsável</th>
-<th class="text-left p-2">Última atualização</th>
-</tr>
-</thead>
+        <div>
+            <label class="block text-xs text-gray-500 mb-1">Filtrar por schema</label>
+            <select name="schema" class="border border-gray-300 rounded px-3 py-2 text-sm bg-white">
+                <option value="">Todos os schemas</option>
+                {% for s in schemas %}
+                <option value="{{ s }}" {% if s == schema_ativo %}selected{% endif %}>{{ s }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
-<tbody>
+        <div>
+            <label class="block text-xs text-gray-500 mb-1">Ordenar por</label>
+            <select name="sort" class="border border-gray-300 rounded px-3 py-2 text-sm bg-white">
+                <option value="nome" {% if sort_ativo == "nome" %}selected{% endif %}>Nome</option>
+                <option value="schema" {% if sort_ativo == "schema" %}selected{% endif %}>Schema</option>
+                <option value="desatualizada" {% if sort_ativo == "desatualizada" %}selected{% endif %}>Mais desatualizada</option>
+            </select>
+        </div>
 
-{% for t in tabelas %}
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
+            Aplicar
+        </button>
 
-<tr class="border-b hover:bg-gray-50">
+        {% if schema_ativo or sort_ativo != "nome" %}
+        <a href="/catalogo/" class="text-gray-500 text-sm px-2 py-2 hover:underline">Limpar filtros</a>
+        {% endif %}
 
-<td class="p-2">{{ t.schema }}</td>
+    </form>
 
-<td class="p-2 font-medium">
-<a href="/catalogo/{{ t.id }}/" class="text-blue-600 hover:underline">
-{{ t.nome }}
-</a>
-</td>
+    <!-- Tabela -->
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
 
-<td class="p-2">{{ t.responsavel }}</td>
+            <thead>
+                <tr class="border-b bg-gray-50">
+                    <th class="text-left px-3 py-2 text-gray-600">Schema</th>
+                    <th class="text-left px-3 py-2 text-gray-600">Tabela</th>
+                    <th class="text-left px-3 py-2 text-gray-600">Responsável</th>
+                    <th class="text-left px-3 py-2 text-gray-600">Última atualização</th>
+                    <th class="text-left px-3 py-2 text-gray-600">Qualidade</th>
+                </tr>
+            </thead>
 
-<td class="p-2">{{ t.ultima_atualizacao }}</td>
+            <tbody>
+            {% for t in tabelas %}
+            <tr class="border-b hover:bg-gray-50">
 
-</tr>
+                <td class="px-3 py-2 text-gray-500">
+                    <span class="bg-gray-100 px-2 py-0.5 rounded text-xs font-mono">{{ t.schema }}</span>
+                </td>
 
-{% endfor %}
+                <td class="px-3 py-2 font-medium">
+                    <a href="/catalogo/{{ t.id }}/" class="text-blue-600 hover:underline">
+                        {{ t.nome }}
+                    </a>
+                </td>
 
-</tbody>
+                <td class="px-3 py-2 text-gray-600">{{ t.responsavel|default:"-" }}</td>
 
-</table>
+                <td class="px-3 py-2 text-gray-500 text-xs">
+                    {{ t.ultima_atualizacao|date:"d/m/Y H:i"|default:"-" }}
+                </td>
+
+                <td class="px-3 py-2">
+                    {% if t.qualidade %}
+                        {% if t.qualidade.taxa_nulos > 0.15 or t.qualidade.taxa_duplicados > 0.03 %}
+                            <span class="bg-red-100 text-red-700 text-xs px-2 py-0.5 rounded-full font-medium">Crítica</span>
+                        {% elif t.qualidade.taxa_nulos > 0.05 or t.qualidade.taxa_duplicados > 0.01 %}
+                            <span class="bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded-full font-medium">Atenção</span>
+                        {% else %}
+                            <span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-medium">Saudável</span>
+                        {% endif %}
+                    {% else %}
+                        <span class="text-gray-300 text-xs">—</span>
+                    {% endif %}
+                </td>
+
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="px-3 py-8 text-center text-gray-400">
+                    Nenhuma tabela encontrada.
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
 
 </div>
 

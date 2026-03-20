@@ -1,278 +1,246 @@
-Demo online: https://predict-fill-link-continuity.trycloudflare.com/
-
 # Data Navigator
 
-Plataforma de **catálogo de metadados com suporte de IA** que permite que analistas descubram datasets, entendam seus schemas e consultem metadados usando linguagem natural.
+![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat&logo=python&logoColor=white)
+![Django](https://img.shields.io/badge/Django-4.x-092E20?style=flat&logo=django&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-pgvector-4169E1?style=flat&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat&logo=docker&logoColor=white)
+![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o--mini-412991?style=flat&logo=openai&logoColor=white)
+![LangChain](https://img.shields.io/badge/LangChain-Agent-1C3C3C?style=flat)
 
-O sistema organiza metadados em um catálogo central e permite consulta através de:
+**Plataforma de catálogo de metadados com IA** para descoberta autônoma de datasets em ambientes corporativos de dados.
 
-- navegação no catálogo
-- busca semântica
-- agente conversacional
+Permite que analistas pesquisem e consultem datasets existentes usando linguagem natural — sem abrir chamados para o time de dados.
 
-O objetivo é permitir **descoberta de dados self-service**, reduzindo dependência do time de dados.
-
----
-
-# Problema
-
-Ambientes de dados corporativos normalmente possuem **centenas de tabelas**.
-
-Problemas comuns:
-
-- analistas não sabem quais datasets existem
-- metadados são incompletos
-- o time de dados recebe muitas perguntas repetidas
-- datasets duplicados acabam sendo criados
-
-O objetivo do projeto é permitir que analistas consigam **descobrir e entender datasets sem depender do time de dados**.
+> Demo online: https://predict-fill-link-continuity.trycloudflare.com/
 
 ---
 
-# Solução
+## O Problema
 
-Criar um **AI Metadata Catalog** que:
+Ambientes de dados corporativos com centenas de tabelas enfrentam desafios recorrentes:
 
-1. ingere metadados do ambiente de dados  
-2. organiza essas informações em um catálogo central  
-3. gera descrições automáticas com IA  
-4. permite busca semântica de datasets  
-5. oferece um agente conversacional para consulta de metadados  
-
-Assim analistas conseguem descobrir datasets existentes **sem abrir chamados para o time de dados**.
+- Analistas não sabem quais datasets existem
+- Metadados incompletos ou desatualizados
+- Time de dados sobrecarregado com perguntas repetidas
+- Construções duplicadas por falta de visibilidade
+- Acesso restrito reduz a autonomia das áreas de negócio
 
 ---
 
-# Arquitetura do Sistema
+## A Solução
 
-Fluxo de alto nível:
+O **Data Navigator** centraliza e enriquece metadados com IA, oferecendo:
 
+1. Catálogo web navegável com filtros e ordenação
+2. Busca semântica por tema usando embeddings vetoriais
+3. Agente conversacional para consulta em linguagem natural
+4. Dashboard de qualidade com monitoramento de nulidade e duplicações
+5. Atualização de metadados sob demanda (refresh)
+6. Connector pronto para integração com Databricks Unity Catalog
+
+---
+
+## Arquitetura
+
+```mermaid
+flowchart TD
+    A[Data Platform\nDatabricks / Unity Catalog] -->|databricks_connector.py| B[Ingestão de Metadados]
+    A2[Geração Sintética\ngerar_metadados.py] -->|POC / demo| B
+    B --> C[(PostgreSQL + pgvector)]
+    C --> D[gerar_embeddings.py\nOpenAI Embeddings]
+    D --> C
+    C --> E[Django Backend]
+    E --> F[Catálogo Web\nlista + filtros + detalhe]
+    E --> G[Dashboard de Qualidade\nnulidade · duplicados · linhas]
+    E --> H[API REST\nbusca semântica]
+    E --> I[Agente LangChain\nGPT-4o-mini]
+    I --> J[Interface de Chat]
+    H --> J
 ```
 
-Data Platform
-↓
-Metadata Ingestion
-↓
-PostgreSQL (pgvector)
-↓
-Catalog API
-↓
-Agent com Tools
-↓
-Interface Web
+---
+
+## Funcionalidades
+
+### Catálogo de Datasets
+
+Interface web para explorar todas as tabelas disponíveis.
+
+- Filtro por schema
+- Ordenação por nome ou data de atualização (mais desatualizada primeiro)
+- Badge de qualidade inline (Saudável / Atenção / Crítica)
+- Navegação para detalhe completo da tabela
+
+### Detalhe da Tabela
+
+Página dedicada por dataset com:
+
+- Schema completo: nome, tipo e descrição de cada coluna
+- Métricas de qualidade com indicação visual por cor
+- Data de última atualização
+- Botão de **Atualizar Metadados** (refresh sob demanda)
+
+### Dashboard de Qualidade
+
+Visão consolidada de saúde dos dados:
+
+- Cards de resumo: total de tabelas, tabelas críticas, médias de nulidade e duplicação
+- Barra de progresso por tabela com código de cor (verde / amarelo / vermelho)
+- Critérios: nulos > 15% ou duplicados > 3% = Crítica
+
+### Busca Semântica
+
+Endpoint REST para busca por similaridade vetorial:
 
 ```
-
-Arquitetura baseada em um catálogo central de metadados enriquecido com IA.
-
----
-
-# Funcionalidades Implementadas
-
-## Catálogo de datasets
-
-Interface web para explorar tabelas disponíveis.
-
-Permite:
-
-- visualizar lista de tabelas
-- navegar por schema
-- ver descrição da tabela
-- visualizar colunas
-- ver tipos de dados
-- visualizar métricas básicas de qualidade
-
----
-
-## Página de detalhe da tabela
-
-Mostra:
-
-- schema
-- colunas
-- tipos de dados
-- descrição do dataset
-- métricas de qualidade
-
----
-
-## Busca semântica
-
-O sistema permite pesquisar datasets usando linguagem natural.
-
-A busca utiliza **embeddings vetoriais** armazenados no banco.
-
----
-
-## Agente conversacional
-
-O sistema inclui um agente de IA capaz de responder perguntas sobre os datasets.
-
-O agente utiliza **tools específicas** para acessar o catálogo.
-
-Tools disponíveis:
-
+GET /api/search/?q=dados de vendas por região
 ```
 
-search_tables
-get_schema
-quality_report
+Retorna as tabelas mais relevantes usando cosine similarity entre embeddings.
 
-```
+### Agente Conversacional
 
-Essas ferramentas permitem recuperar informações estruturadas sobre tabelas.
+Agente LangChain com GPT-4o-mini e três ferramentas especializadas:
 
----
-
-## Chat com o catálogo
-
-Interface de chat integrada ao agente.
+| Tool | Descrição |
+|---|---|
+| `search_tables` | Busca semântica de datasets por tema |
+| `get_schema` | Retorna colunas e tipos de uma tabela |
+| `quality_report` | Métricas de qualidade de uma tabela |
 
 Exemplos de perguntas:
 
 ```
-
 quais tabelas possuem dados de vendas?
-qual o schema da tabela sales_orders?
-quais datasets estão desatualizados?
-
+qual o schema da tabela logistics_table_3?
+quais datasets estão com alta taxa de nulos?
 ```
 
----
+### Connector Databricks Unity Catalog
 
-# Ingestão de Metadados
+Script pronto em `ingestao/databricks_connector.py` para integração com a API REST do Unity Catalog.
 
-Scripts de ingestão populam o catálogo com metadados.
+Para ativar, configure as variáveis de ambiente e execute:
 
-No POC os dados são **gerados sinteticamente** para simular um ambiente real com aproximadamente 100 tabelas.
+```bash
+# Configurar no docker-compose.yml ou .env
+DATABRICKS_HOST=https://<workspace>.azuredatabricks.net
+DATABRICKS_TOKEN=<personal-access-token>
+DATABRICKS_CATALOG=<nome-do-catalogo>
 
-Metadados gerados:
-
-- catalog
-- schema
-- table name
-- columns
-- data types
-- owner
-- last update
-
-Também são geradas:
-
-- métricas básicas de qualidade
-- embeddings para busca semântica
-
----
-
-# Métricas de Qualidade
-
-O sistema calcula indicadores simples de qualidade de dados:
-
-- null_rate
-- duplicate_rate
-- row_count
-- last update
-
-Essas métricas ajudam a entender a confiabilidade do dataset.
-
----
-
-
-
----
-
-# Stack Tecnológica
-
-Backend
-
-- Python
-- Django
-- Django REST Framework
-
-Banco de dados
-
-- PostgreSQL
-- pgvector
-
-IA
-
-- OpenAI
-- LangChain
-
-Frontend
-
-- Django Templates
-
-Infraestrutura
-
-- Docker
-- Docker Compose
-
-Ambiente de desenvolvimento
-
-- Python 3.11+
-
----
-
-# Como rodar o projeto
-
-## 1. Clonar repositório
-
+# Executar ingestão
+docker exec -it catalog_backend python ingestao/databricks_connector.py
 ```
 
+> No modo demo atual, os metadados são gerados sinteticamente via `gerar_metadados.py`.
+
+---
+
+## Screenshots
+
+### Home
+
+> _Inserir screenshot da página inicial_
+
+### Catálogo com Filtros
+
+> _Inserir screenshot da listagem com filtro de schema ativo_
+
+### Detalhe da Tabela
+
+> _Inserir screenshot da página de detalhe com métricas de qualidade_
+
+### Dashboard de Qualidade
+
+> _Inserir screenshot do dashboard com barras de progresso coloridas_
+
+### Chat com o Agente
+
+> _Inserir screenshot de uma conversa com o agente_
+
+---
+
+## Stack Tecnológica
+
+| Camada | Tecnologia |
+|---|---|
+| Backend | Python 3.11, Django, Django REST Framework |
+| Banco de dados | PostgreSQL, pgvector |
+| IA / LLM | OpenAI (GPT-4o-mini, text-embedding-3-small) |
+| Agent framework | LangChain |
+| Frontend | Django Templates, Tailwind CSS, HTMX |
+| Infraestrutura | Docker, Docker Compose |
+
+---
+
+## Como Rodar
+
+### 1. Clonar o repositório
+
+```bash
 git clone <repo>
 cd ai-metadata-catalog
-
 ```
 
-## 2. Subir containers
+### 2. Configurar variáveis de ambiente
 
+Crie um arquivo `.env` na raiz com:
+
+```env
+OPENAI_API_KEY=sk-...
 ```
 
+### 3. Subir os containers
+
+```bash
 docker-compose up --build
-
 ```
 
-## 3. Rodar ingestão de metadados
+### 4. Gerar metadados sintéticos
 
-```
-
+```bash
 docker exec -it catalog_backend python ingestao/gerar_metadados.py
-
 ```
 
-## 4. Gerar embeddings
+### 5. Gerar embeddings para busca semântica
 
-```
-
+```bash
 docker exec -it catalog_backend python ingestao/gerar_embeddings.py
-
 ```
 
+### 6. Acessar
 
-```
-
-
-```
-
-O sistema já permite demonstrar:
-
-- AI Data Discovery
-- Semantic Search
-- Conversational Data Catalog
-- Schema Exploration
-- Metadata Quality Insights
+| URL | Descrição |
+|---|---|
+| `http://localhost:8000/` | Home |
+| `http://localhost:8000/catalogo/` | Catálogo de datasets |
+| `http://localhost:8000/catalogo/qualidade/` | Dashboard de qualidade |
+| `http://localhost:8000/chat/` | Chat com o agente |
+| `http://localhost:8000/api/search/?q=vendas` | API de busca semântica |
 
 ---
 
-# Objetivo do Projeto
+## Roadmap
 
-Este projeto demonstra experiência prática em:
+- [x] Catálogo web com navegação e filtros
+- [x] Busca semântica por embeddings vetoriais
+- [x] Agente conversacional com LangChain
+- [x] Dashboard de qualidade (nulidade, duplicações, linhas)
+- [x] Refresh de metadados sob demanda
+- [x] Connector Databricks Unity Catalog (pronto para integração)
+- [ ] Autenticação e controle de acesso por área
+- [ ] Scheduler de atualização automática de metadados
+- [ ] Lineage: rastreabilidade de dependências entre tabelas
+- [ ] Geração automática de descrições com LLM na ingestão
 
-- data platforms
-- data governance
-- vector search
-- LLM agents
-- metadata catalog
-- backend engineering
+---
 
-Além de reproduzir um problema comum em empresas que utilizam grandes ambientes de dados.
+## Contexto de Negócio
+
+Este projeto foi desenvolvido para endereçar o desafio de **governança e acessibilidade de metadados** em ambientes corporativos com alto volume de dados — como o Unity Catalog/Data Catalog do Databricks — onde:
+
+- Times de dados recebem dezenas de solicitações repetidas por dia
+- Analistas não têm autonomia para descobrir datasets existentes
+- Falta visibilidade sobre qualidade e atualização dos dados
+
+O objetivo é reduzir o esforço do time de dados, aumentar a autonomia das áreas de negócio e promover uma cultura data-driven.
