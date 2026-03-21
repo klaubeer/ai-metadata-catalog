@@ -1,13 +1,26 @@
 from langchain_openai import ChatOpenAI
 from langchain.agents import create_openai_tools_agent, AgentExecutor
-from langchain.tools import Tool
+from langchain.tools import StructuredTool
 from langchain.memory import ConversationBufferWindowMemory
 
 from agente.ferramentas import search_tables, get_schema, quality_report
 from agente.prompt import SYSTEM_PROMPT
 
+# Instância única reutilizada entre requisições,
+# preservando o histórico da conversa.
+_agente_instance = None
 
-def criar_agente():
+
+def get_agente():
+    global _agente_instance
+
+    if _agente_instance is None:
+        _agente_instance = _criar_agente()
+
+    return _agente_instance
+
+
+def _criar_agente():
 
     llm = ChatOpenAI(
         model="gpt-4o-mini",
@@ -22,23 +35,23 @@ def criar_agente():
 
     tools = [
 
-        Tool(
-            name="search_tables",
+        StructuredTool.from_function(
             func=search_tables,
-            description="Buscar tabelas relacionadas a um tema."
+            name="search_tables",
+            description="Buscar tabelas relacionadas a um tema.",
         ),
 
-        Tool(
-            name="get_schema",
+        StructuredTool.from_function(
             func=get_schema,
-            description="Retorna as colunas de uma tabela."
+            name="get_schema",
+            description="Retorna as colunas de uma tabela pelo nome.",
         ),
 
-        Tool(
-            name="quality_report",
+        StructuredTool.from_function(
             func=quality_report,
-            description="Retorna métricas de qualidade de uma tabela."
-        )
+            name="quality_report",
+            description="Retorna métricas de qualidade de uma tabela pelo nome.",
+        ),
 
     ]
 
@@ -48,11 +61,9 @@ def criar_agente():
         prompt=SYSTEM_PROMPT
     )
 
-    agent_executor = AgentExecutor(
+    return AgentExecutor(
         agent=agent,
         tools=tools,
         memory=memory,
         verbose=True
     )
-
-    return agent_executor

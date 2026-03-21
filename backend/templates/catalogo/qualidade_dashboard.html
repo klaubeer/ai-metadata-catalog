@@ -69,15 +69,7 @@
         <tbody>
             {% for m in metricas %}
 
-            {% if m.taxa_nulos > 0.15 or m.taxa_duplicados > 0.03 %}
-                {% with row_class="border-b hover:bg-red-50" nulos_class="text-red-600 font-semibold" %}
-            {% elif m.taxa_nulos > 0.05 or m.taxa_duplicados > 0.01 %}
-                {% with row_class="border-b hover:bg-yellow-50" nulos_class="text-yellow-600 font-semibold" %}
-            {% else %}
-                {% with row_class="border-b hover:bg-gray-50" nulos_class="text-green-600" %}
-            {% endif %}
-
-            <tr class="{{ row_class }}">
+            <tr class="border-b {% if m.taxa_nulos > 0.15 or m.taxa_duplicados > 0.03 %}hover:bg-red-50{% elif m.taxa_nulos > 0.05 or m.taxa_duplicados > 0.01 %}hover:bg-yellow-50{% else %}hover:bg-gray-50{% endif %}">
 
                 <td class="px-4 py-3 text-gray-500">{{ m.tabela.schema }}</td>
 
@@ -93,7 +85,6 @@
 
                 <td class="px-4 py-3">
                     <div class="flex items-center gap-2">
-                        {% with pct=m.taxa_nulos|floatformat:1 %}
                         <div class="w-24 bg-gray-200 rounded-full h-2">
                             <div class="h-2 rounded-full
                                 {% if m.taxa_nulos > 0.15 %}bg-red-500
@@ -102,8 +93,9 @@
                                 style="width: {{ m.taxa_nulos|floatformat:2 }}00%">
                             </div>
                         </div>
-                        <span class="{{ nulos_class }}">{{ m.taxa_nulos|floatformat:1 }}%</span>
-                        {% endwith %}
+                        <span class="{% if m.taxa_nulos > 0.15 %}text-red-600 font-semibold{% elif m.taxa_nulos > 0.05 %}text-yellow-600 font-semibold{% else %}text-green-600{% endif %}">
+                            {{ m.taxa_nulos|floatformat:1 }}%
+                        </span>
                     </div>
                 </td>
 
@@ -132,7 +124,6 @@
 
             </tr>
 
-            {% endwith %}
             {% empty %}
             <tr>
                 <td colspan="6" class="px-4 py-8 text-center text-gray-400">

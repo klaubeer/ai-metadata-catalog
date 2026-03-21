@@ -1,7 +1,7 @@
 # Data Navigator
 
 ![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat&logo=python&logoColor=white)
-![Django](https://img.shields.io/badge/Django-4.x-092E20?style=flat&logo=django&logoColor=white)
+![Django](https://img.shields.io/badge/Django-5.x-092E20?style=flat&logo=django&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-pgvector-4169E1?style=flat&logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat&logo=docker&logoColor=white)
 ![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o--mini-412991?style=flat&logo=openai&logoColor=white)
@@ -177,19 +177,31 @@ OPENAI_API_KEY=sk-...
 docker-compose up --build
 ```
 
-### 4. Gerar metadados sintéticos
+### 4. Rodar as migrations
+
+```bash
+docker exec -it catalog_backend python manage.py migrate
+```
+
+### 5. Gerar metadados sintéticos
 
 ```bash
 docker exec -it catalog_backend python ingestao/gerar_metadados.py
 ```
 
-### 5. Gerar embeddings para busca semântica
+### 6. Gerar metadados sintéticos
+
+```bash
+docker exec -it catalog_backend python ingestao/gerar_metadados.py
+```
+
+### 7. Gerar embeddings para busca semântica
 
 ```bash
 docker exec -it catalog_backend python ingestao/gerar_embeddings.py
 ```
 
-### 6. Acessar
+### 8. Acessar
 
 | URL | Descrição |
 |---|---|

@@ -65,8 +65,8 @@ def refresh_tabela(request, tabela_id):
         },
     )
 
-    metricas.taxa_nulos = round(random.uniform(0, 0.2), 3)
-    metricas.taxa_duplicados = round(random.uniform(0, 0.05), 3)
+    metricas.taxa_nulos = round(random.uniform(0, 0.08), 3)
+    metricas.taxa_duplicados = round(random.uniform(0, 0.01), 3)
     metricas.quantidade_linhas = random.randint(1000, 100000)
     metricas.ultima_execucao = timezone.now()
     metricas.save()
@@ -91,7 +91,7 @@ def catalogo(request):
     schema_filtro = request.GET.get("schema", "")
     sort = request.GET.get("sort", "nome")
 
-    tabelas = Tabela.objects.all()
+    tabelas = Tabela.objects.select_related("qualidade").all()
 
     if schema_filtro:
         tabelas = tabelas.filter(schema=schema_filtro)
@@ -105,7 +105,7 @@ def catalogo(request):
 
     schemas = Tabela.objects.values_list("schema", flat=True).distinct().order_by("schema")
 
-    return render(
+    response = render(
         request,
         "catalogo/lista_tabelas.html",
         {
@@ -115,6 +115,8 @@ def catalogo(request):
             "sort_ativo": sort,
         },
     )
+    response["Cache-Control"] = "no-store"
+    return response
 
 
 # -----------------------------------------------

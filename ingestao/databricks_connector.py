@@ -9,7 +9,7 @@ COMO ATIVAR:
 
        DATABRICKS_HOST=https://<workspace>.azuredatabricks.net
        DATABRICKS_TOKEN=<personal-access-token>
-       DATABRICKS_CATALOG=<nome-do-catalogo>   (ex: main, fruki_catalog)
+       DATABRICKS_CATALOG=<nome-do-catalogo>   (ex: main,)
 
   2. Execute a ingestão:
        docker exec -it catalog_backend python ingestao/databricks_connector.py

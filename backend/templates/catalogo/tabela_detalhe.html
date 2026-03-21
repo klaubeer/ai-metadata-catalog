@@ -147,7 +147,8 @@ document.body.addEventListener("htmx:afterRequest", function(evt) {
     if (evt.detail.pathInfo && evt.detail.pathInfo.requestPath && evt.detail.pathInfo.requestPath.includes("refresh")) {
         const status = document.getElementById("refresh-status");
         if (evt.detail.successful) {
-            status.innerHTML = '<div class="bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-2 rounded">Metadados atualizados com sucesso. Recarregue a página para ver as novas métricas.</div>';
+            status.innerHTML = '<div class="bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-2 rounded">Metadados atualizados. Recarregando...</div>';
+            setTimeout(function() { location.reload(); }, 1000);
         } else {
             status.innerHTML = '<div class="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-2 rounded">Erro ao atualizar metadados.</div>';
         }

@@ -160,3 +160,35 @@ margin-bottom:8px;
 .bubble li{
 margin-bottom:4px;
 }
+
+
+/* loading dots */
+
+.bubble.loading{
+display:flex;
+align-items:center;
+gap:5px;
+padding:12px 16px;
+}
+
+.bubble.loading span{
+width:8px;
+height:8px;
+border-radius:50%;
+background:#9ca3af;
+animation:bounce 1.2s infinite ease-in-out;
+}
+
+.bubble.loading span:nth-child(2){ animation-delay:0.2s; }
+.bubble.loading span:nth-child(3){ animation-delay:0.4s; }
+
+@keyframes bounce{
+0%,80%,100%{ transform:scale(0.7); opacity:0.5; }
+40%{ transform:scale(1); opacity:1; }
+}
+
+#input-area button:disabled,
+#pergunta:disabled{
+opacity:0.5;
+cursor:not-allowed;
+}

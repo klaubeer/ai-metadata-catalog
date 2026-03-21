@@ -4,39 +4,16 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
-from agente.agente import criar_agente
-from catalog.models import Tabela
+from agente.agente import get_agente
+
 
 def home(request):
     return render(request, "home.html")
 
-# ---------------------------
-# PAGE - Catalog
-# ---------------------------
-
-def catalogo(request):
-
-    tabelas = Tabela.objects.all().order_by("schema", "nome")
-
-    return render(
-        request,
-        "catalogO/lista_tabelas.html",
-        {"tabelas": tabelas}
-    )
-
-
-# ---------------------------
-# PAGE - Chat
-# ---------------------------
 
 def chat_page(request):
-
     return render(request, "chat/chat.html")
 
-
-# ---------------------------
-# API - Agent
-# ---------------------------
 
 @csrf_exempt
 def chat(request):
@@ -47,24 +24,18 @@ def chat(request):
     try:
 
         body = json.loads(request.body.decode("utf-8"))
-
         pergunta = body.get("pergunta")
 
         if not pergunta:
             return JsonResponse({"erro": "Pergunta nao enviada"}, status=400)
 
-        agente = criar_agente()
-
+        agente = get_agente()
         resposta = agente.invoke({"input": pergunta})
 
-        return JsonResponse({
-            "resposta": resposta["output"]
-        })
+        return JsonResponse({"resposta": resposta["output"]})
 
     except Exception as e:
 
-        return JsonResponse({
-            "erro": str(e)
-        }, status=500)
+        return JsonResponse({"erro": str(e)}, status=500)
     
     
