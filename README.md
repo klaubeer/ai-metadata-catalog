@@ -11,7 +11,7 @@
 
 Permite que analistas pesquisem e consultem datasets existentes usando linguagem natural — sem abrir chamados para o time de dados.
 
-> Demo online: https://predict-fill-link-continuity.trycloudflare.com/
+> Demo online: requisite por email para klaubeer@gmail.com que eu mando um link atualizado. Ou copie o projeto/repositório do git e rode localmente.
 
 ---
 
@@ -138,26 +138,7 @@ docker exec -it catalog_backend python ingestao/databricks_connector.py
 
 ## Screenshots
 
-### Home
-
-> _Inserir screenshot da página inicial_
-
-### Catálogo com Filtros
-
-> _Inserir screenshot da listagem com filtro de schema ativo_
-
-### Detalhe da Tabela
-
-> _Inserir screenshot da página de detalhe com métricas de qualidade_
-
-### Dashboard de Qualidade
-
-> _Inserir screenshot do dashboard com barras de progresso coloridas_
-
-### Chat com o Agente
-
-> _Inserir screenshot de uma conversa com o agente_
-
+Veja os Screenshots na raiz do projeto.
 ---
 
 ## Stack Tecnológica
