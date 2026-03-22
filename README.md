@@ -237,3 +237,7 @@ Este projeto foi desenvolvido para endereçar o desafio de **governança e acess
 - Falta visibilidade sobre qualidade e atualização dos dados
 
 O objetivo é reduzir o esforço do time de dados, aumentar a autonomia das áreas de negócio e promover uma cultura data-driven.
+
+## Autor
+
+Klauber Fischer
