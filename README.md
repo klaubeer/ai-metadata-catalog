@@ -40,6 +40,12 @@ O **Data Navigator** centraliza e enriquece metadados com IA, oferecendo:
 
 ---
 
+## Demonstração
+
+![Data Navigator Demo](data-navigator.gif)
+
+---
+
 ## Arquitetura
 
 ```mermaid
